@@ -6,7 +6,7 @@ The above import brings in the tool-agnostic project rules. Everything below is 
 
 ## Subagents
 
-This repo defines three subagents under `.claude/agents/`, matching the roles in `pipeline/orchestration.md`:
+This repo defines three subagents under `.github/agents`, matching the roles in `pipeline/orchestration.md`:
 
 - `ba-agent` — turns a feature intent into a committed spec under `pipeline/features/`.
 - `developer-agent` — implements a committed spec into working code, loading the relevant skills and rules.

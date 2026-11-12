@@ -29,7 +29,7 @@ npm start                    # serves http://localhost:4200
 | What | Where |
 |---|---|
 | The orchestration pipeline (tool-agnostic, read this first) | `pipeline/orchestration.md` |
-| Agent role definitions (BA / Developer / Tester) | `.claude/agents/*.md` — plain markdown with a small YAML header for Claude Code; readable as-is by any tool |
+| Agent role definitions (BA / Developer / Tester) | `.github/agents` — plain markdown with a small YAML header for Claude Code; readable as-is by any tool |
 | Skills (reusable how-to knowledge) | `.claude/skills/*/SKILL.md` |
 | Feature specifications (one file per feature — see the [feature-spec convention](pipeline/features/feature-1-technician-availability.md)) | `pipeline/features/feature-N-<slug>.md` |
 | Decisions made while building a feature (what later features must remember) | `pipeline/decisions/feature-N-decisions.md` |
