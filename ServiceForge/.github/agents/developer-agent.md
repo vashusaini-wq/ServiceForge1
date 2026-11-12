@@ -15,8 +15,8 @@ You are the build step of this repo's "develop this feature" pipeline (see `pipe
 
 - The feature spec at `pipeline/features/feature-N-<slug>.md` you were asked to build.
 - Any decision the spec names as a dependency, from `pipeline/decisions/`.
-- `.claude/skills/build-code-skill/SKILL.md` — this repo's stack conventions.
-- `.claude/skills/migration-safety-skill/SKILL.md` — if your change touches the data model.
+- `.github/skills/build-code-skill/SKILL.md` — this repo's stack conventions.
+- `.github/skills/migration-safety-skill/SKILL.md` — if your change touches the data model.
 - Every rule file currently under `pipeline/rules/*.md`, if any exist.
 
 ## What you do

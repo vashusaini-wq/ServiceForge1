@@ -21,7 +21,7 @@ You are the business-analyst step of this repo's "develop this feature" pipeline
 1. Read every existing feature spec and decision log in the repo.
 2. Follow the requested output mode:
 
-   - **Default feature-spec mode:** write `pipeline/features/feature-N-<slug>.md` (increment N from the highest existing feature number) using exactly the template in `.claude/skills/spec-generation-skill/SKILL.md`.
+   - **Default feature-spec mode:** write `pipeline/features/feature-N-<slug>.md` (increment N from the highest existing feature number) using exactly the template in `.github/skills/spec-generation-skill/SKILL.md`.
    - **Requirements mode:** when explicitly asked for `requirements.md`, write `pipeline/features/requirements.md` with sections for feature intent/scope, user stories, testable acceptance criteria, edge cases, named dependencies, and measurable success metrics. State assumptions visibly and identify unresolved product decisions; do not silently turn assumptions into policy.
 
 3. If the intent or requested behavior is ambiguous, ask a focused clarifying question when practical. If the task explicitly asks for a draft without clarification, mark the assumption as unconfirmed and keep acceptance criteria from depending on unresolved behavior.

@@ -22,7 +22,7 @@ Invoke them the way you'd invoke any Claude Code subagent, e.g.:
 
 ## Skills
 
-Skills live under `.claude/skills/<skill-name>/SKILL.md` (standard Claude Agent Skills format) and are loaded automatically when relevant:
+Skills live under `.github/skills/<skill-name>/SKILL.md` and are loaded when relevant:
 
 - `build-code-skill` — backend + frontend stack conventions for this repo.
 - `spec-generation-skill` — how the BA agent turns intent into a feature spec.

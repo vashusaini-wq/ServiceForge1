@@ -8,11 +8,11 @@ Any "develop this feature: `<intent>`" request must go through the three-step pi
 
 ## Role definitions
 
-The BA, Developer, and Tester roles are defined in full under `.claude/agents/*.md`. They were written in Claude Code's subagent format (a small YAML header, then the role body) but the content is plain markdown — read and follow them the same way you'd follow any instruction file. Reusable slash-command versions of the same three roles are in `.github/prompts/` if you'd rather invoke them that way.
+The BA, Developer, Tester, and Bugfix roles are defined in full under `.github/agents/*.md`. They are plain markdown with a small YAML header — read and follow them the same way you'd follow any instruction file. Reusable slash-command versions of the BA, Developer, and Tester roles are in `.github/prompts/`.
 
 ## Skills
 
-Load `.claude/skills/build-code-skill/SKILL.md` before writing backend or frontend code — it has the package layout, DI style, REST conventions, and Angular conventions this repo expects. `.claude/skills/spec-generation-skill/SKILL.md` and `.claude/skills/migration-safety-skill/SKILL.md` apply to the BA role and to data-model changes respectively.
+Load `.github/skills/build-code-skill/SKILL.md` before writing backend or frontend code — it has the package layout, DI style, REST conventions, and Angular conventions this repo expects. `.github/skills/spec-generation-skill/SKILL.md` and `.github/skills/migration-safety-skill/SKILL.md` apply to the BA role and to data-model changes respectively.
 
 ## Conventions to always respect
 

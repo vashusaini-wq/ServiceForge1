@@ -36,4 +36,4 @@ com.serviceforge.dto          - request/response shapes that aren't raw models
 
 ## Both sides
 
-Do not introduce a new external dependency (a database driver, an auth library, a new frontend UI kit) without checking whether it should first be a recorded decision — see `.claude/skills/migration-safety-skill/SKILL.md` for the data-model case specifically.
+Do not introduce a new external dependency (a database driver, an auth library, a new frontend UI kit) without checking whether it should first be a recorded decision — see `.github/skills/migration-safety-skill/SKILL.md` for the data-model case specifically.
