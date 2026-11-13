@@ -33,7 +33,8 @@ npm start                    # serves http://localhost:4200
 | Skills (reusable how-to knowledge) | `.github/skills/*/SKILL.md` |
 | Feature specifications (one file per feature — see the [feature-spec convention](pipeline/features/feature-1-technician-availability.md)) | `pipeline/features/feature-N-<slug>.md` |
 | Decisions made while building a feature (what later features must remember) | `pipeline/decisions/feature-N-decisions.md` |
-| Project-wide rules | added under `pipeline/rules/` as they're written — none exist yet; the first one gets created the first time a shipped bug needs a standing rule against recurring |
+| Project-wide rules | `pipeline/rules/*.md` |
+| Build journal | `pipeline/build-journal.md` |
 
 ## Coding conventions
 

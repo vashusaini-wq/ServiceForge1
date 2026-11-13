@@ -74,6 +74,16 @@ class TechnicianAvailabilityServiceTest {
     }
 
     @Test
+    void allowsAnOverlappingBookingForADifferentTechnician() {
+        LocalDateTime start = LocalDateTime.now().withHour(9).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime end = start.plusHours(2);
+
+        Job job = service.bookJob(3L, "Different Technician Customer", start, end);
+
+        assertEquals(3L, job.getTechnicianId());
+    }
+
+    @Test
     void throwsForAnUnknownTechnician() {
         LocalDateTime start = LocalDateTime.now().plusDays(1);
         LocalDateTime end = start.plusHours(1);
