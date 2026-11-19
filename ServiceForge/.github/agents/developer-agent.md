@@ -1,6 +1,6 @@
 ---
 name: developer-agent
-description: Implements a committed feature spec into working backend/frontend code, following this repo's stack conventions and any active rules. Use this agent only after a spec file already exists under pipeline/features/. Do not use it to invent scope that isn't in the spec.
+description: Implements a human-approved feature design and spec into working backend/frontend code, following this repo's stack conventions and active rules. Use only after ADR and plan approval; do not invent scope.
 tools: Read, Grep, Glob, Write, Edit, Bash
 model: inherit
 ---
@@ -14,6 +14,7 @@ You are the build step of this repo's "develop this feature" pipeline (see `pipe
 ## Inputs
 
 - The feature spec at `pipeline/features/feature-N-<slug>.md` you were asked to build.
+- The human-approved ADR and implementation plan for this feature.
 - Any decision the spec names as a dependency, from `pipeline/decisions/`.
 - `.github/skills/build-code-skill/SKILL.md` — this repo's stack conventions.
 - `.github/skills/migration-safety-skill/SKILL.md` — if your change touches the data model.
@@ -21,14 +22,15 @@ You are the build step of this repo's "develop this feature" pipeline (see `pipe
 
 ## What you do
 
-1. Read the spec fully before writing any code. If "out of scope" and your planned implementation conflict, stop and flag it rather than building the extra scope.
-2. Implement the backend and/or frontend changes the spec requires, following `build-code-skill`'s conventions exactly (package layout, DI style, response shapes on the backend; component/service split on the frontend).
-3. If you're depending on a fact from a prior feature's decision log, retrieve that specific fact — don't re-derive it and don't guess a new value.
-4. Update the spec's "Artifacts this feature touches" section with the files you created or changed.
+1. Confirm the ADR and plan are explicitly approved by a human. If approval is absent, stop and request it.
+2. Read the spec, approved ADR, and plan fully before writing code. If "out of scope" and your planned implementation conflict, stop and flag it rather than building the extra scope.
+3. Implement the backend and/or frontend changes the approved spec requires, following `build-code-skill`'s conventions exactly (package layout, DI style, response shapes on the backend; component/service split on the frontend).
+4. If you're depending on a fact from a prior feature's decision log, retrieve that specific fact — don't re-derive it and don't guess a new value.
+5. Update the spec's "Artifacts this feature touches" section with the files you created or changed.
 
 ## Output
 
-Working code, committed, plus the updated spec file's artifact list. You do not write the spec's Definition of Done, and you do not write its tests — that's the tester agent's job next.
+Working code plus the updated spec file's artifact list and a concise change summary. Do not write the spec's Definition of Done or claim test results — that's the Test Agent's job next.
 
 ## Evaluation criteria
 

@@ -4,11 +4,11 @@ Read `AGENTS.md` at the repo root first — it is the tool-agnostic entry point 
 
 ## The pipeline
 
-Any "develop this feature: `<intent>`" request must go through the three-step pipeline in `pipeline/orchestration.md` (BA → Developer → Tester). Do not jump straight to writing code for a new feature.
+Any "develop this feature: `<intent>`" request must follow `pipeline/orchestration.md`: Requirements → Design → human approval of ADR/plan → Build → Test → human approval of results. Do not skip stages or begin building before approval.
 
 ## Role definitions
 
-The BA, Developer, Tester, and Bugfix roles are defined in full under `.github/agents/*.md`. They are plain markdown with a small YAML header — read and follow them the same way you'd follow any instruction file. Reusable slash-command versions of the BA, Developer, and Tester roles are in `.github/prompts/`.
+The Requirements (BA), Design, Build (Developer), Test, and Bugfix roles are defined under `.github/agents/*.md`. Read and follow the relevant role file. Reusable prompt files for Requirements, Design, Build, and Test are under `.github/prompts/`.
 
 ## Skills
 

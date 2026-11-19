@@ -22,14 +22,14 @@ npm start                    # serves http://localhost:4200
 
 ## The one rule every agent follows here
 
-**"Develop this feature" is a standing instruction, not a one-off prompt.** Whenever anyone (human or agent) says "develop this feature: <intent>", the work must go through the pipeline defined in **[`pipeline/orchestration.md`](pipeline/orchestration.md)** — BA → Developer → Tester, in that order, with the relevant skills and rules loaded dynamically. Do not skip straight to writing code.
+**"Develop this feature" is a standing instruction, not a one-off prompt.** Whenever anyone (human or agent) says "develop this feature: <intent>", the work must go through **[`pipeline/orchestration.md`](pipeline/orchestration.md)** — Requirements → Design → human approval → Build → Test → human approval. Do not skip stages or start building before the ADR and plan are approved.
 
 ## Where things live
 
 | What | Where |
 |---|---|
 | The orchestration pipeline (tool-agnostic, read this first) | `pipeline/orchestration.md` |
-| Agent role definitions (BA / Developer / Tester) | `.github/agents` — plain markdown with a small YAML header for Claude Code; readable as-is by any tool |
+| Agent role definitions (Requirements / Design / Build / Test) | `.github/agents` — plain markdown with a small YAML header for Claude Code; readable as-is by any tool |
 | Skills (reusable how-to knowledge) | `.github/skills/*/SKILL.md` |
 | Feature specifications (one file per feature — see the [feature-spec convention](pipeline/features/feature-1-technician-availability.md)) | `pipeline/features/feature-N-<slug>.md` |
 | Decisions made while building a feature (what later features must remember) | `pipeline/decisions/feature-N-decisions.md` |
