@@ -4,15 +4,15 @@ Read `AGENTS.md` at the repo root first — it is the tool-agnostic entry point 
 
 ## The pipeline
 
-Any "develop this feature: `<intent>`" request must go through the three-step pipeline in `pipeline/orchestration.md` (BA → Developer → Tester). Do not jump straight to writing code for a new feature.
+Any "develop this feature: `<intent>`" request must follow `pipeline/orchestration.md`: Requirements → Design → human approval of ADR/plan → Build → Test → human approval of results. Do not skip stages or begin building before approval.
 
 ## Role definitions
 
-The BA, Developer, and Tester roles are defined in full under `.claude/agents/*.md`. They were written in Claude Code's subagent format (a small YAML header, then the role body) but the content is plain markdown — read and follow them the same way you'd follow any instruction file. Reusable slash-command versions of the same three roles are in `.github/prompts/` if you'd rather invoke them that way.
+The Requirements (BA), Design, Build (Developer), Test, and Bugfix roles are defined under `.github/agents/*.md`. Read and follow the relevant role file. Reusable prompt files for Requirements, Design, Build, and Test are under `.github/prompts/`.
 
 ## Skills
 
-Load `.claude/skills/build-code-skill/SKILL.md` before writing backend or frontend code — it has the package layout, DI style, REST conventions, and Angular conventions this repo expects. `.claude/skills/spec-generation-skill/SKILL.md` and `.claude/skills/migration-safety-skill/SKILL.md` apply to the BA role and to data-model changes respectively.
+Load `.github/skills/build-code-skill/SKILL.md` before writing backend or frontend code — it has the package layout, DI style, REST conventions, and Angular conventions this repo expects. `.github/skills/spec-generation-skill/SKILL.md` and `.github/skills/migration-safety-skill/SKILL.md` apply to the BA role and to data-model changes respectively.
 
 ## Conventions to always respect
 

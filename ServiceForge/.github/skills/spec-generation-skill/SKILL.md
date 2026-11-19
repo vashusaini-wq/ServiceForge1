@@ -7,7 +7,7 @@ description: Use whenever turning a raw feature intent into a committed feature-
 
 ## When to use this
 
-Anytime a "develop this feature" instruction arrives with only a one-line intent, and no spec file yet exists for it under `pipeline/features/`.
+Anytime a "develop this feature" instruction arrives with only a raw intent, and no reviewed requirements artifact exists under `pipeline/features/`. Use the default feature-spec template unless the instruction explicitly requests a different artifact such as `requirements.md`.
 
 ## The template (must be followed exactly)
 
@@ -38,3 +38,17 @@ Ask: what is the next, obviously-related feature someone might be tempted to fol
 ## How to fill in "Definition of Done" correctly
 
 Every item must be something the tester agent could write one test against. If an item can't be phrased as a pass/fail check, it isn't ready to go in the spec yet — ask a clarifying question instead of guessing.
+
+## Requirements mode
+
+When explicitly asked to create `pipeline/features/requirements.md`, write a human-reviewable draft with these sections:
+
+- Feature intent and scope, including explicit in-scope and out-of-scope boundaries.
+- User stories.
+- Testable acceptance criteria.
+- Edge cases.
+- Named dependencies on exact prior decisions.
+- Measurable success metrics with a stated measurement basis.
+- Visible assumptions and unresolved product decisions.
+
+Do not silently promote an assumption to a product decision. Acceptance criteria must not depend on unresolved policy. Label test-suite targets as test targets rather than implying production telemetry exists. The BA produces the draft only; a human adds review annotations and accepts it before implementation.

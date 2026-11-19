@@ -1,50 +1,80 @@
-# The "develop this feature" pipeline
+# The "develop this feature" workflow
 
-This is the single, tool-agnostic description of how any feature in this repo gets built. It exists so the same workflow can be followed whether you're driving it from Claude Code, GitHub Copilot, Codex, or reading it yourself. Every tool-specific file in this repo (`CLAUDE.md`, `.github/copilot-instructions.md`, `AGENTS.md`) points here.
+This is the tool-agnostic workflow for developing a feature in ServiceForge. It separates understanding, design, implementation, and validation so each agent has one clear responsibility. Tool-specific instructions in `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` point here.
 
-## The trigger
+## Trigger
 
-Anyone — human or agent — can kick this off with a single instruction:
+Start with:
 
 > **"Develop this feature: `<intent>`"**
 
-That one line is the only input. Everything else below is how it gets turned into a shipped feature.
+The workflow coordinates four specialized agents. The human sets priorities, resolves business decisions, and approves the design and test results. Agents must not silently fill gaps with invented policy.
 
-## The three steps
+## Workflow at a glance
 
-### 1 — BA (turns intent into a spec)
+```text
+Requirements Agent
+        ↓
+Design Agent
+        ↓
+Human approves ADR and plan
+        ↓
+Build Agent
+        ↓
+Test Agent
+        ↓
+Human approves test results before delivery
+```
 
-- **Role definition:** `.claude/agents/ba-agent.md`
-- **Skill it loads:** `.claude/skills/spec-generation-skill/SKILL.md`
-- **What it does:** takes the raw intent, asks what it needs to (scope, dependencies on prior features, definition of done), and commits a new file at `pipeline/features/feature-N-<slug>.md` following the same template as `pipeline/features/feature-1-technician-availability.md`.
-- **What it must check first:** every existing file under `pipeline/features/` and `pipeline/decisions/`, so the new spec correctly names what it depends on instead of guessing.
-- **Output:** one committed spec file. Nothing gets built yet.
+Each stage receives the prior accepted output and returns a defined artifact. The next stage does not start until its required input and approval are available.
 
-### 2 — Developer (turns the spec into code)
+## 1. Requirements Agent — understand the feature
 
-- **Role definition:** `.claude/agents/developer-agent.md`
-- **Skills it loads:** `.claude/skills/build-code-skill/SKILL.md` (stack conventions) and, if the change touches the data model, `.claude/skills/migration-safety-skill/SKILL.md`.
-- **Rules it must follow:** everything under `pipeline/rules/*.md` that exists at the time (there are none yet — the first one gets written the first time a shipped bug needs a standing rule against recurring).
-- **What it does:** implements the spec from step 1, in the backend and/or frontend as the spec requires, without expanding scope beyond what the spec says.
-- **Output:** working code, committed.
+- **Role:** `.github/agents/ba-agent.md`
+- **Skill:** `.github/skills/spec-generation-skill/SKILL.md`
+- **Input:** Feature request, business requirements, existing feature specs, and relevant decision logs.
+- **Work:** Identify user needs, scope, user stories, acceptance criteria, constraints, assumptions, and open questions. Check every existing file under `pipeline/features/` and `pipeline/decisions/` for dependencies.
+- **Output:** One draft feature specification under `pipeline/features/` (or `requirements.md` when explicitly requested). It must include testable acceptance criteria and label unresolved decisions.
+- **Handoff:** Workflow sends the draft to Design. The Requirements Agent does not design the architecture or write application code.
 
-### 3 — Tester (checks the code against the spec)
+## 2. Design Agent — choose the technical approach
 
-- **Role definition:** `.claude/agents/tester-agent.md`
-- **What it does:** writes and runs tests against the Definition of Done in the spec from step 1 — not against what the code happens to do, but against what it was supposed to do.
-- **Output:** test results. If they fail, the loop returns to step 2, not step 1 — the spec doesn't change because the code didn't meet it.
+- **Role:** `.github/agents/design-agent.md`
+- **Input:** Requirements draft, business constraints, relevant prior decisions, and the implementation-plan request.
+- **Work:** Challenge requirements for ambiguity, then define the solution architecture, component interactions, data flow, alternatives, trade-offs, and risks. Write an ADR and a build-ready task plan as requested. Do not write application code.
+- **Output:** Proposed ADR and implementation plan, with assumptions and open questions visible.
+- **Handoff:** Human reviews priorities and trade-offs and explicitly approves the ADR and plan. Build must not begin before this approval. If there are unresolved decisions affecting behavior, Design asks the human rather than choosing a policy.
 
-## Safe recovery
+## 3. Build Agent — implement the approved design
 
-If any step produces something that doesn't match its input (a spec with no Definition of Done, code that doesn't match the spec, tests that can't run), stop and surface that to a human rather than proceeding on a guess. This pipeline has no silent fallback.
+- **Role:** `.github/agents/developer-agent.md`
+- **Skills:** `.github/skills/build-code-skill/SKILL.md`; also `.github/skills/migration-safety-skill/SKILL.md` for data-model changes.
+- **Input:** Human-approved ADR and plan, accepted feature specification, relevant decision logs, and active rules under `pipeline/rules/*.md`.
+- **Work:** Implement only the approved scope, following task dependencies and repository conventions. For parts reservation, the protected Reserve Part action must recheck stock and prevent duplicate reservation as specified.
+- **Output:** Working code and an implementation summary identifying changed files and unresolved questions.
+- **Handoff:** Workflow starts Test only when the implementation is available. The Build Agent does not change requirements or claim test results.
 
-## Human checkpoints
+## 4. Test Agent — verify the business rules
 
-A human should look at the output of step 1 (the spec) before step 2 starts — specs are cheap to correct, code is not. Everything else can run unattended unless something trips the safe-recovery condition above.
+- **Role:** `.github/agents/tester-agent.md`
+- **Input:** Accepted feature specification and acceptance criteria, approved design, and built changes.
+- **Work:** Write and run tests against the stated criteria. At minimum for parts reservation, verify no-stock behavior, two users competing for the last unit, and same-request retries. Report test failures and unrun/blocked checks explicitly.
+- **Output:** Test code and a pass/fail report by acceptance criterion, with evidence and defect reproduction details.
+- **Handoff:** Workflow presents results to the human for approval before delivery. Failed tests return to Build for fixes, then Test reruns affected checks; requirements do not change merely to make a test pass.
 
-## Running this in each tool
+## Human checkpoints and safe recovery
 
-- **Claude Code:** the three role files under `.claude/agents/` are real Claude Code subagents (they have the frontmatter Claude Code expects). Say "develop this feature: `<intent>`" and Claude Code should route through them in order, per this document.
-- **GitHub Copilot:** use the matching prompt files in `.github/prompts/` (`ba-agent.prompt.md`, `developer-agent.prompt.md`, `tester-agent.prompt.md`) as slash commands, in the order above, or paste this document into a Copilot Chat session as context.
-- **Codex / any `AGENTS.md`-reading CLI agent:** `AGENTS.md` already points here. Give the same "develop this feature" instruction; the agent should read the three role files under `.claude/agents/` as plain markdown (the YAML header is harmless to ignore) and follow the same three steps.
-- **Anyone without an agent tool:** the three role files are readable specs. Do the three steps yourself, in order.
+1. Human sets priorities and resolves business trade-offs.
+2. Human approves the ADR and task plan before Build.
+3. Human reviews test results and approves delivery.
+
+These are project workflow approvals. They are separate from any runtime business-rule check (such as a reservation critic), which must pass before an individual reservation is finalized.
+
+At any stage, stop and ask the human if inputs conflict, a required behavior is undecided, or the next stage cannot proceed. Do not turn a blocked or unrun test into a pass. Workflow records the open question or failure and routes it to the responsible prior stage.
+
+## Running the workflow
+
+- **Claude Code:** Read this file and the matching role definitions in `.github/agents/`; run Requirements → Design → human approval → Build → Test → human approval.
+- **GitHub Copilot:** Use the matching prompt files in `.github/prompts/` for each role in the same order, pausing for human approval at the stated gates.
+- **Codex / other tools:** Read this file and the role definitions in `.github/agents/`; pass each stage's output to the next and pause at the human gates.
+- **Without an agent tool:** A person can perform the same stages using the role definitions as checklists.

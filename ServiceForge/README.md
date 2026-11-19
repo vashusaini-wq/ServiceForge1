@@ -32,4 +32,4 @@ Start at **[`AGENTS.md`](AGENTS.md)**. It's the entry point for Claude Code, Git
 
 - A real, working technician-booking flow (list technicians → view their jobs → book a new one).
 - A real bug in that flow (see `pipeline/features/feature-1-technician-availability.md` and `pipeline/decisions/feature-1-decisions.md` — no spoilers here).
-- Pre-baked agent, skill, and pipeline artifacts, ready to extend — nothing about the *next* feature exists yet. That starts with you.
+- Pre-baked agent, skill, and pipeline artifacts, ready to extend — Feature 2's requirements draft is under human review in `pipeline/features/requirements.md`.
