@@ -1,0 +1,11 @@
+# Build-Ready Work Plan — Parts Reservation
+
+| Task ID / Task | Owner | Depends on | Output | Estimate | Done check |
+|---|---|---|---|---:|---|
+| T-01 / Add part and reservation data to the mock store | Backend developer | None | Seeded parts; reservation job, part, quantity, user, request ID, time, and status; derived availability | 45 min | Availability is on-hand stock minus active reservations; store resets on restart; existing jobs are unchanged. |
+| T-02 / Build protected Reserve Part, availability, and release actions **(highest risk)** | Backend developer | T-01 | Spring service/API actions; one protected final stock check and reservation transition | 90 min | Two simultaneous valid requests for one remaining unit result in exactly one reservation; stock never goes negative. Empty stock creates no reservation. Repeated release restores availability only once. |
+| T-03 / Add duplicate-request and critic safeguards | Backend developer | T-02 | Request-ID idempotency and fail-closed critic validation | 60 min | Repeating the same request creates one reservation; reusing its ID with a different payload is rejected. Critic rejection/unavailability or notes asking to bypass rules never finalizes a reservation. |
+| T-04 / Build the scheduled-job parts screen | Frontend developer | T-02, T-03 | Angular availability, reserve/release actions, confirmation, and “Part unavailable” message | 60 min | Sam can see server-confirmed reservation status; unavailable stock has a clear message; retries use the same request ID. Scheduling and travel-buffer behavior are unchanged. |
+| T-05 / Test, review, and report outcomes | Tester | T-01, T-02, T-03, T-04 | Automated backend/UI checks and a results summary for human review | 75 min | Test evidence covers one winner for the final unit, no reservation at zero stock, duplicate clicks, one-time release, and critic/notes rejection. Report actual pass/fail results; do not mark unrun checks as passed. |
+
+Build order: T-01 → T-02 → T-03 → T-04 → T-05. The human approves the design before implementation and reviews test results before delivery. Resolve the open user-identity and expiry decisions before implementing any behavior that depends on them. Tests in this plan are planned, not yet executed.

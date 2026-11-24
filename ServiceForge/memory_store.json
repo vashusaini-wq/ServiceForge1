@@ -1,0 +1,16 @@
+{
+  "records": [
+    {
+      "id": "feature-1-overlap-booking-v1",
+      "namespace": "vashusaini-wq/ServiceForge1:Feature/ba-decision:local-dev",
+      "source_task": "feature-1/overlap-booking",
+      "timestamp": "2026-11-18T10:00:00+00:00",
+      "type_tag": "domain_fact",
+      "status": "verified",
+      "feature": "Feature 1 - Technician Availability",
+      "stage": "build",
+      "text": "Feature 1 approved rule: bookings use a 45-minute travel buffer and half-open reserved intervals; overlapping bookings conflict.",
+      "superseded_by": null
+    }
+  ]
+}

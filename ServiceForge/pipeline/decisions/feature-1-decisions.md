@@ -10,8 +10,17 @@ Decisions made while building Feature 1 that later features may need to retrieve
 
 **Where it lives in code:** `backend/src/main/java/com/serviceforge/service/TechnicianAvailabilityService.java`, `TRAVEL_BUFFER_MINUTES` constant.
 
-## Decision: overlap detection compares exact start times, not intervals
+## Decision: booking conflicts use half-open reserved intervals
 
-**What was decided (and should probably be reconsidered):** the current overlap check in `bookJob(...)` rejects a new booking only if its start time exactly matches an existing booking's start time. It does not check whether the two time ranges genuinely overlap.
+**What was decided:** each job reserves `[start time, scheduled end + 45 minutes)`, a half-open interval.
+A booking for the same technician conflicts when its reserved interval intersects an existing
+job's reserved interval. The service uses `TRAVEL_BUFFER_MINUTES` for both intervals.
 
-**Why it matters:** this is a live bug, not a design choice anyone defended. It means two jobs with different-but-overlapping start times for the same technician are both silently accepted. Anything that assumes "a technician's booked slots never overlap" is currently assuming something the code doesn't guarantee.
+**Boundary behavior:** the end point is excluded, so a new job may start exactly 45 minutes after
+the earlier job's scheduled end. A start during that 45-minute travel buffer conflicts. For example,
+a seeded 09:00-11:00 job conflicts with starts at 10:00 and 11:30, but permits 11:45.
+
+**Why it matters:** this makes interval overlaps impossible while preserving the travel time required
+between jobs. Booking conflicts still follow the existing HTTP 409 response path.
+
+**Where it lives in code:** `backend/src/main/java/com/serviceforge/service/TechnicianAvailabilityService.java`.

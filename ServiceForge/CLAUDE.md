@@ -6,23 +6,25 @@ The above import brings in the tool-agnostic project rules. Everything below is 
 
 ## Subagents
 
-This repo defines three subagents under `.claude/agents/`, matching the roles in `pipeline/orchestration.md`:
+This repo defines four feature-work subagents under `.github/agents`, matching the stages in `pipeline/orchestration.md`:
 
-- `ba-agent` — turns a feature intent into a committed spec under `pipeline/features/`.
-- `developer-agent` — implements a committed spec into working code, loading the relevant skills and rules.
-- `tester-agent` — writes and runs tests against a spec's Definition of Done.
+- `ba-agent` — turns a feature intent into a requirements/specification draft.
+- `design-agent` — challenges the requirements and drafts the ADR and implementation plan.
+- `developer-agent` — implements the human-approved design into working code.
+- `tester-agent` — writes and runs tests against the approved acceptance criteria.
 
 Invoke them the way you'd invoke any Claude Code subagent, e.g.:
 
 ```
-"Develop this feature: <intent>" 
-→ Claude Code should route this through ba-agent, then developer-agent, then tester-agent,
-  per pipeline/orchestration.md — not write code directly.
+"Develop this feature: <intent>"
+→ Route through ba-agent → design-agent → human ADR/plan approval
+  → developer-agent → tester-agent → human test-result approval,
+  per pipeline/orchestration.md — do not skip gates or write code directly.
 ```
 
 ## Skills
 
-Skills live under `.claude/skills/<skill-name>/SKILL.md` (standard Claude Agent Skills format) and are loaded automatically when relevant:
+Skills live under `.github/skills/<skill-name>/SKILL.md` and are loaded when relevant:
 
 - `build-code-skill` — backend + frontend stack conventions for this repo.
 - `spec-generation-skill` — how the BA agent turns intent into a feature spec.
